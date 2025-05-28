@@ -1,0 +1,16 @@
+---
+// components/Headings.astro
+const { level = 1, children } = Astro.props;
+const Tag = `h${level}`;
+---
+
+<Tag
+  class:list={[
+    level === 1 && "text-4xl font-bold mb-6 border-b pb-4",
+    level === 2 && "text-3xl font-semibold mb-4 mt-8",
+    level === 3 && "text-2xl font-medium mb-3 mt-6",
+    "text-sky-blue dark:text-royal-periwinkle border-morning-fog dark:border-deep-ocean",
+  ]}
+>
+  {children}
+</Tag>

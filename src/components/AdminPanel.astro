@@ -1,193 +1,229 @@
 ---
+import RichTextEditor from "./RichTextEditor.astro";
+
 // at top of your component
 const isDev = import.meta.env.DEV;
 const now = new Date();
+const { existingContent } = Astro.props;
 ---
 
 {
   isDev && (
-    <div class="p-8 bg-snow-white dark:bg-dark-navy rounded-lg shadow-md my-8 border border-morning-fog dark:border-deep-ocean transition-colors duration-300">
-      <h2 class="text-2xl font-bold mb-6 pb-4 border-b border-morning-fog dark:border-deep-ocean text-sky-blue dark:text-royal-periwinkle">
-        إنشاء منشور جديد
-      </h2>
+    <div class="p-4 sm:p-8 bg-snow-white dark:bg-dark-navy rounded-xl shadow-lg my-6 border border-morning-fog/50 dark:border-deep-ocean/50 transition-all duration-300">
+      <header class="mb-8">
+        <h2 class="text-2xl font-bold text-sky-blue dark:text-royal-periwinkle flex items-center gap-2 pb-4 border-b border-morning-fog/30 dark:border-deep-ocean/50">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+          </svg>
+          إنشاء مدونة جديد
+        </h2>
+      </header>
 
       <form id="createPostForm" class="space-y-8">
-        {/* Slug & Title & Description */}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* title */}
-          <div>
-            <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-              العنوان
-            </label>
-            <input
-              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent"
-              type="text"
-              name="title"
-              required
-            />
-          </div>
-          {/* Optional meta */}
-          <div>
-            <label class="block text-mountain-mist dark:text-morning-fog/80 font-medium mb-2">
-              المؤلف (اختياري)
-            </label>
-            <input
-              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent"
-              type="text"
-              name="author"
-              placeholder="اسم المؤلف"
-            />
-          </div>
-          {/* slug */}
-          <div>
-            <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-              الرابط المختصر (Slug)
-            </label>
-            <input
-              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle dark:text-morning-fog/70 bg-transparent"
-              type="text"
-              name="slug"
-              placeholder="my-blog-post"
-              pattern="^[a-z0-9-]+$"
-              required
-            />
-            <p class="mt-2 text-sm text-mountain-mist dark:text-morning-fog/70">
-              أحرف صغيرة، أرقام، وشرطات فقط
-            </p>
-          </div>
-        </div>
-        {/* Date Inputs */}
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/** Year */}
-          <div>
-            <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-              السنة
-            </label>
-            <input
-              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent"
-              type="number"
-              name="year"
-              value={now.getFullYear()}
-              required
-            />
-          </div>
-          {/** Month */}
-          <div>
-            <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-              الشهر
-            </label>
-            <input
-              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent"
-              type="number"
-              name="month"
-              min="1"
-              max="12"
-              value={now.getMonth() + 1}
-              required
-            />
-          </div>
-          {/** Day */}
-          <div>
-            <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-              اليوم
-            </label>
-            <input
-              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent"
-              type="number"
-              name="day"
-              min="1"
-              max="31"
-              value={now.getDate()}
-              required
-            />
-          </div>
-          <div>
-            <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-              التاريخ الهجري (اختياري)
-            </label>
-            <input
-              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent"
-              type="text"
-              name="arabicDate"
-              placeholder="١ رمضان ١٤٤٥"
-            />
-          </div>
-        </div>
+        {/* Main Content Section */}
+        <section class="space-y-8">
+          {/* Title Group */}
 
-        <div>
-          <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-            الوصف المختصر
-          </label>
-          <textarea
-            class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent resize-y"
-            name="description"
-            rows={2}
-            required
+          {/* Slug & Title & Description */}
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* title */}
+            <div class="space-y-2">
+              <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                العنوان
+              </label>
+              <input
+                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                type="text"
+                name="title"
+                placeholder="عنوان المدونة"
+                required
+              />
+            </div>
+            {/* Optional meta */}
+            <div>
+              <label class="block text-mountain-mist dark:text-morning-fog/80 font-medium mb-2">
+                المؤلف (اختياري)
+              </label>
+              <input
+                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                type="text"
+                name="author"
+                placeholder="اسم المؤلف"
+              />
+            </div>
+            {/* slug */}
+            <div>
+              <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                الرابط المختصر (Slug)
+              </label>
+              <input
+                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle dark:text-morning-fog/70 bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                type="text"
+                name="slug"
+                placeholder="my-blog-post"
+                pattern="^[a-z0-9-]+$"
+                required
+              />
+              <p class="mt-2 text-sm text-mountain-mist dark:text-morning-fog/70">
+                أحرف صغيرة، أرقام، وشرطات فقط
+              </p>
+            </div>
+          </div>
+          {/* Date Inputs */}
+          <div class="space-y-6 p-6 bg-white/30 dark:bg-deep-ocean/20 rounded-xl border border-morning-fog/20 dark:border-deep-ocean/30">
+            <h3 class="text-sm font-semibold text-sky-blue dark:text-royal-periwinkle mb-4">
+              تاريخ النشر
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/** Year */}
+              <div>
+                <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                  السنة
+                </label>
+                <input
+                  class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                  type="number"
+                  name="year"
+                  placeholder="2026"
+                  value={now.getFullYear()}
+                  required
+                />
+              </div>
+              {/** Month */}
+              <div>
+                <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                  الشهر
+                </label>
+                <input
+                  class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                  type="number"
+                  name="month"
+                  min="1"
+                  max="12"
+                  placeholder="1-12"
+                  value={now.getMonth() + 1}
+                  required
+                />
+              </div>
+              {/** Day */}
+              <div>
+                <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                  اليوم
+                </label>
+                <input
+                  class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                  type="number"
+                  name="day"
+                  min="1"
+                  max="31"
+                  placeholder="1-31"
+                  value={now.getDate()}
+                  required
+                />
+              </div>
+              <div>
+                <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                  التاريخ الهجري (اختياري)
+                </label>
+                <input
+                  class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                  type="text"
+                  name="arabicDate"
+                  placeholder="١ رمضان ١٤٤٥"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+              الوصف المختصر
+            </label>
+            <textarea
+              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent resize-y placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+              name="description"
+              placeholder="وصف قصير للمدونة"
+              rows={2}
+              required
+            />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                الوسوم (فصل بفواصل)
+              </label>
+              <input
+                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                type="text"
+                name="tags"
+                placeholder="تقنية, برمجة"
+              />
+            </div>
+            <div>
+              <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                التصنيفات (فصل بفواصل)
+              </label>
+              <input
+                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                type="text"
+                name="categories"
+                placeholder="مقالات, دروس"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Draft Toggle */}
+        <div class="flex items-center gap-3 p-3 bg-amber-glow/5 dark:bg-amber-glow/10 rounded-lg border border-amber-glow/20">
+          <input
+            class="form-checkbox h-5 w-5 text-royal-periwinkle dark:text-sky-blue border-2 border-gray-300 dark:border-gray-500 rounded-md focus:ring-2 focus:ring-sky-blue/30 dark:focus:ring-royal-periwinkle/30 bg-white/50 dark:bg-deep-ocean/20"
+            type="checkbox"
+            name="draft"
+            id="draft"
+            value="true"
           />
+          <label
+            for="draft"
+            class="text-sm font-medium text-deep-ocean dark:text-morning-fog/90"
+          >
+            وضع كمُسودة
+          </label>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-              الوسوم (فصل بفواصل)
-            </label>
-            <input
-              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent"
-              type="text"
-              name="tags"
-              placeholder="تقنية, برمجة"
-            />
-          </div>
-          <div>
-            <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-              التصنيفات (فصل بفواصل)
-            </label>
-            <input
-              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent"
-              type="text"
-              name="categories"
-              placeholder="مقالات, دروس"
-            />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="flex items-center">
-            <input
-              class="form-checkbox h-5 w-5 text-royal-periwinkle dark:text-sky-blue border-morning-fog rounded focus:ring-sky-blue dark:focus:ring-royal-periwinkle"
-              type="checkbox"
-              name="draft"
-              id="draft"
-              value="true"
-            />
-            <label
-              for="draft"
-              class="ms-3 text-deep-ocean dark:text-morning-fog"
-            >
-              وضع كمُسودة
-            </label>
-          </div>
-        </div>
-
         <div>
           <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
             المحتوى
           </label>
-          <textarea
-            class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent resize-y"
+          {/* <textarea
+            class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent resize-y"
             name="content"
             rows={8}
             required
-          />
-        </div>
+          /> */}
 
-        <button
-          type="submit"
-          class="w-full py-3 px-6 bg-royal-periwinkle dark:bg-sky-blue text-white rounded-lg hover:bg-royal-periwinkle/90 dark:hover:bg-sky-blue/90 transition-colors duration-200 font-medium focus:ring-2 focus:ring-offset-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle"
-        >
-          إنشاء المنشور
-        </button>
+          <RichTextEditor content={existingContent || ""} />
+        </div>
       </form>
+      <button
+        type="submit"
+        class="w-full py-3.5 px-6 bg-royal-periwinkle dark:bg-sky-blue text-white/90 dark:text-white rounded-xl hover:bg-royal-periwinkle/90 dark:hover:bg-sky-blue/90 transition-all duration-200 font-medium flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+        إنشاء المدونة
+      </button>
     </div>
   )
 }
