@@ -1,0 +1,422 @@
+---
+// src/pages/contact.astro
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-dark-navy to-deep-ocean py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1
+        class="text-4xl md:text-5xl font-bold text-snow-white mb-6 font-Amiri"
+      >
+        تواصل معنا
+      </h1>
+      <p class="text-xl text-mountain-mist max-w-2xl mx-auto">
+        هل لديك مشروع في الاعتبار؟ نحن نحب أن نسمع منك. أرسل لنا رسالة وسنرد في
+        أقرب وقت ممكن.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact Form Section -->
+  <section class="py-20 bg-gradient-to-b from-snow-white to-morning-fog">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Contact Information -->
+        <div
+          class="bg-gradient-to-br from-dark-navy/95 to-deep-ocean/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-sky-blue/20"
+        >
+          <h2
+            class="text-2xl font-bold text-snow-white mb-6 font-Amiri text-right"
+          >
+            معلومات التواصل
+          </h2>
+
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4 space-x-reverse">
+              <div
+                class="w-12 h-12 bg-gradient-to-r from-sky-blue to-aqua-accent rounded-lg flex items-center justify-center flex-shrink-0"
+              >
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="text-right">
+                <h3 class="text-lg font-semibold text-snow-white">
+                  البريد الإلكتروني
+                </h3>
+                <p class="text-aqua-accent">safha.dev@gmail.com</p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4 space-x-reverse">
+              <div
+                class="w-12 h-12 bg-gradient-to-r from-emerald-growth to-sky-blue rounded-lg flex items-center justify-center flex-shrink-0"
+              >
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div class="text-right">
+                <h3 class="text-lg font-semibold text-snow-white">
+                  وقت الاستجابة
+                </h3>
+                <p class="text-aqua-accent">قريباً :)</p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4 space-x-reverse">
+              <div
+                class="w-12 h-12 bg-gradient-to-r from-royal-periwinkle to-emerald-growth rounded-lg flex items-center justify-center flex-shrink-0"
+              >
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 002 2h2a2 2 0 002-2V8a2 2 0 00-2-2h-2V6z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="text-right">
+                <h3 class="text-lg font-semibold text-snow-white">الخدمات</h3>
+                <p class="text-aqua-accent">تطوير الويب، التصميم، الاستشارات</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div
+          class="bg-gradient-to-br from-deep-ocean/10 to-dark-navy/5 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-morning-fog/50"
+        >
+          <h2
+            class="text-2xl font-bold text-deep-ocean mb-6 font-Amiri text-right"
+          >
+            أرسل لنا رسالة
+          </h2>
+
+          <!-- Success Message Display -->
+          <div
+            id="success-display"
+            class="hidden mb-6 p-6 bg-gradient-to-r from-emerald-growth/20 to-sky-blue/20 rounded-xl border border-emerald-growth/30"
+          >
+            <div
+              class="flex items-center justify-center space-x-3 space-x-reverse"
+            >
+              <div
+                class="w-12 h-12 bg-emerald-growth rounded-full flex items-center justify-center"
+              >
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <div class="text-right">
+                <h3 class="text-lg font-semibold text-emerald-growth">
+                  تم الإرسال بنجاح!
+                </h3>
+                <p class="text-deep-ocean">
+                  شكراً لك! تم إرسال رسالتك بنجاح. سنتواصل معك قريباً.
+                </p>
+              </div>
+            </div>
+            <button
+              onclick="resetForm()"
+              class="mt-4 w-full bg-gradient-to-r from-sky-blue to-royal-periwinkle text-white font-semibold py-3 px-6 rounded-lg hover:from-royal-periwinkle hover:to-sky-blue transition-all duration-200"
+            >
+              إرسال رسالة أخرى
+            </button>
+          </div>
+
+          <form
+            action="https://formspree.io/f/mvgrqvbd"
+            method="POST"
+            class="space-y-6"
+            id="contact-form"
+          >
+            <div>
+              <label
+                for="name"
+                class="block text-sm font-medium text-deep-ocean mb-2 text-right"
+                >الاسم الكامل</label
+              >
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                class="w-full px-4 py-3 border border-mountain-mist/30 rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent transition-colors duration-200 bg-white/70 backdrop-blur-sm text-right"
+                placeholder="اسمك الكامل"
+                dir="rtl"
+              />
+            </div>
+
+            <div>
+              <label
+                for="email"
+                class="block text-sm font-medium text-deep-ocean mb-2 text-right"
+                >عنوان البريد الإلكتروني</label
+              >
+              <input
+                type="email"
+                id="email"
+                name="_gotcha"
+                required
+                class="w-full px-4 py-3 border border-mountain-mist/30 rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent transition-colors duration-200 bg-white/70 backdrop-blur-sm text-right"
+                placeholder="your.email@example.com"
+                dir="ltr"
+              />
+            </div>
+
+            <div>
+              <label
+                for="subject"
+                class="block text-sm font-medium text-deep-ocean mb-2 text-right"
+                >الموضوع</label
+              >
+              <select
+                id="subject"
+                name="subject"
+                required
+                class="w-full px-4 py-3 border border-mountain-mist/30 rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent transition-colors duration-200 bg-white/70 backdrop-blur-sm text-right"
+                dir="rtl"
+              >
+                <option value="">اختر موضوعاً</option>
+                <option value="Web Development">تطوير الويب</option>
+                <option value="Design Services">خدمات التصميم</option>
+                <option value="Consulting">الاستشارات</option>
+                <option value="Support">الدعم</option>
+                <option value="Other">أخرى</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                for="message"
+                class="block text-sm font-medium text-deep-ocean mb-2 text-right"
+                >الرسالة</label
+              >
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+                class="w-full px-4 py-3 border border-mountain-mist/30 rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent transition-colors duration-200 resize-vertical bg-white/70 backdrop-blur-sm text-right"
+                placeholder="أخبرنا عن مشروعك أو كيف يمكننا مساعدتك..."
+                dir="rtl"></textarea>
+            </div>
+
+            <!-- Hidden fields for email configuration -->
+            <input type="hidden" name="_to" value="safha.dev@gmail.com" />
+            <input
+              type="hidden"
+              name="_subject"
+              value="رسالة جديدة من نموذج التواصل"
+            />
+            <input type="hidden" name="_language" value="ar" />
+
+            <button
+              type="submit"
+              id="submit-btn"
+              class="w-full bg-gradient-to-r from-sky-blue to-royal-periwinkle text-white font-semibold py-4 px-6 rounded-lg hover:from-royal-periwinkle hover:to-sky-blue transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              <span
+                class="flex items-center justify-center space-x-2 space-x-reverse"
+              >
+                <span>إرسال الرسالة</span>
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+              </span>
+            </button>
+          </form>
+
+          <!-- Error Message -->
+          <div
+            id="error-display"
+            class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-lg"
+          >
+            <div class="flex items-center space-x-2 space-x-reverse">
+              <svg
+                class="w-5 h-5 text-red-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <p class="text-red-700 text-right">
+                عذراً، حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-gradient-to-r from-royal-periwinkle to-sky-blue py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold text-white mb-4 font-Amiri">
+        مستعد لبدء مشروعك؟
+      </h2>
+      <p class="text-xl text-blue-100 mb-8">
+        دعنا نناقش كيف يمكننا تحويل أفكارك إلى واقع.
+      </p>
+      <a
+        href="mailto:safha.dev@gmail.com"
+        class="inline-flex items-center bg-white text-royal-periwinkle font-semibold px-8 py-4 rounded-lg hover:bg-snow-white transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+      >
+        <svg
+          class="w-5 h-5 ml-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          ></path>
+        </svg>
+        راسلنا مباشرة
+      </a>
+    </div>
+  </section>
+
+  <script>
+    // Form submission handling
+    document
+      .getElementById("contact-form")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const form = this;
+        const formData = new FormData(form);
+        const submitBtn = document.getElementById("submit-btn");
+        const successDisplay = document.getElementById("success-display");
+        const errorDisplay = document.getElementById("error-display");
+
+        // Show loading state
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML =
+          '<span class="flex items-center justify-center space-x-2 space-x-reverse"><span>جاري الإرسال...</span><svg class="animate-spin w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m6.364 1.636l-2.828 2.828M20 12h-4m-1.636 6.364l-2.828-2.828M12 20v-4M4.636 17.364l2.828-2.828M4 12h4m1.636-6.364l2.828 2.828"></path></svg></span>';
+        submitBtn.disabled = true;
+
+        // Submit to Formspree
+        fetch(form.action, {
+          method: "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json",
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              // Success
+              form.style.display = "none";
+              successDisplay.classList.remove("hidden");
+              errorDisplay.classList.add("hidden");
+            } else {
+              throw new Error("Form submission failed");
+            }
+          })
+          .catch((error) => {
+            // Error
+            errorDisplay.classList.remove("hidden");
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+          });
+      });
+
+    // Reset form function
+    function resetForm() {
+      const form = document.getElementById("contact-form");
+      const successDisplay = document.getElementById("success-display");
+      const errorDisplay = document.getElementById("error-display");
+      const submitBtn = document.getElementById("submit-btn");
+
+      form.reset();
+      form.style.display = "block";
+      successDisplay.classList.add("hidden");
+      errorDisplay.classList.add("hidden");
+
+      // Reset button
+      submitBtn.innerHTML =
+        '<span class="flex items-center justify-center space-x-2 space-x-reverse"><span>إرسال الرسالة</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg></span>';
+      submitBtn.disabled = false;
+    }
+
+    // Add smooth animations on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = "1";
+          entry.target.style.transform = "translateY(0)";
+        }
+      });
+    }, observerOptions);
+
+    // Animate elements on scroll
+    document.querySelectorAll(".rounded-2xl").forEach((el) => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(20px)";
+      el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+      observer.observe(el);
+    });
+  </script>
+</Layout>

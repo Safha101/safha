@@ -61,7 +61,6 @@ const { existingContent } = Astro.props;
                 type="text"
                 name="slug"
                 placeholder="my-blog-post"
-                pattern="^[a-z0-9-]+$"
                 required
               />
               <p class="mt-2 text-sm text-mountain-mist dark:text-morning-fog/70">
@@ -204,26 +203,26 @@ const { existingContent } = Astro.props;
 
           <RichTextEditor content={existingContent || ""} />
         </div>
-      </form>
-      <button
-        type="submit"
-        class="w-full py-3.5 px-6 bg-royal-periwinkle dark:bg-sky-blue text-white/90 dark:text-white rounded-xl hover:bg-royal-periwinkle/90 dark:hover:bg-sky-blue/90 transition-all duration-200 font-medium flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
-      >
-        <svg
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+        <button
+          type="submit"
+          class="w-full py-3.5 px-6 bg-royal-periwinkle dark:bg-sky-blue text-white/90 dark:text-white rounded-xl hover:bg-royal-periwinkle/90 dark:hover:bg-sky-blue/90 transition-all duration-200 font-medium flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-        إنشاء المدونة
-      </button>
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          إنشاء المدونة
+        </button>
+      </form>
     </div>
   )
 }
