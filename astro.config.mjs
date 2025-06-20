@@ -10,6 +10,7 @@ import path from "path";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://safha.dev",
   integrations: [
     mdx(),
     tailwind(),
@@ -36,7 +37,6 @@ export default defineConfig({
     }),
     astroMetaTags(),
   ],
-  site: "https://safha.dev",
   output: import.meta.env.DEV ? "server" : "static",
   adapter: import.meta.env.DEV ? netlify() : undefined,
   vite: {

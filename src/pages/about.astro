@@ -7,102 +7,168 @@ import IconRocket from "../components/Icons/IconRocket.astro";
 import Layout from "../layouts/Layout.astro";
 
 const allPosts = await getCollection("blog");
+
+// SEO metadata
+const seoData = {
+  title: "من نحن - بوابتك إلى العالم التقني العربي",
+  description:
+    "تعرف على مهمتنا في تبسيط التكنولوجيا وتقديم محتوى تقني عربي عالي الجودة. نحن نُترجم التعقيد التقني إلى محتوى مبسط يُلهم الجيل العربي الرقمي",
+  keywords: "تقنية عربية، تعليم تقني، برمجة، تطوير، محتوى عربي، تكنولوجيا",
+  canonicalUrl: "https://yoursite.com/about",
+  ogImage: "https://yoursite.com/images/about-og.jpg",
+};
 ---
 
-<Layout title="من نحن">
+<Layout
+  title={seoData.title}
+  description={seoData.description}
+  keywords={seoData.keywords}
+  canonicalUrl={seoData.canonicalUrl}
+  ogImage={seoData.ogImage}
+>
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json" slot="head">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "اسم موقعك التقني",
+      "url": "https://yoursite.com",
+      "logo": "https://yoursite.com/logo.png",
+      "description": "منصة تقنية عربية متخصصة في تبسيط التكنولوجيا وتقديم محتوى تعليمي عالي الجودة",
+      "foundingDate": "2024",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "info@yoursite.com"
+      },
+      "sameAs": [
+        "https://twitter.com/yourhandle",
+        "https://linkedin.com/company/yourcompany"
+      ],
+      "areaServed": {
+        "@type": "Place",
+        "name": "العالم العربي"
+      },
+      "knowsAbout": [
+        "البرمجة",
+        "تطوير الويب",
+        "الذكاء الاصطناعي",
+        "التقنية",
+        "التعليم التقني"
+      ]
+    }
+  </script>
+
   <div
     class="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 py-16"
   >
     <div class="max-w-6xl mx-auto px-4">
-      <!-- Hero Section -->
-      <div class="text-center mb-16">
+      <!-- Hero Section with SEO-optimized headings -->
+      <header class="text-center mb-16">
         <h1
           class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6"
         >
           <span
             class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-emerald-600 mb-5"
           >
-            صفحة
+            من نحن
           </span>
           <br />
           <span class="mt-5">بوابتك إلى العالم التقني العربي</span>
         </h1>
         <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-          نُترجم التعقيد التقني إلى محتوى عربي مبسَّط، لنصنع فضاءً معرفياً يُلهم
-          الجيل العربي الرقمي
+          نُترجم التعقيد التقني إلى محتوى تعليمي تقني باللغة العربية، يركز على
+          البرمجة وتطوير المهارات الرقمية
         </p>
-      </div>
+      </header>
 
-      <!-- Values Grid -->
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-        <div
-          class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-        >
-          <IconRocket class="w-12 h-12 text-blue-600 mb-4" />
-          <h3 class="text-xl font-semibold mb-2 dark:text-white">
-            إطلاق العقول
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            تفكيك المفاهيم المعقدة إلى خطوات تنفيذية عملية
-          </p>
-        </div>
+      <!-- Values Grid with semantic HTML -->
+      <section class="mb-20" aria-label="قيمنا ومبادئنا">
+        <h2 class="sr-only">قيمنا الأساسية</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <article
+            class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+          >
+            <IconRocket
+              class="w-12 h-12 text-blue-600 mb-4"
+              aria-hidden="true"
+            />
+            <h3 class="text-xl font-semibold mb-2 dark:text-white">
+              إطلاق العقول
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              تفكيك المفاهيم التقنية المعقدة إلى خطوات تنفيذية عملية وسهلة الفهم
+            </p>
+          </article>
 
-        <div
-          class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-        >
-          <IconGlobe class="w-12 h-12 text-emerald-600 mb-4" />
-          <h3 class="text-xl font-semibold mb-2 dark:text-white">جسر معرفي</h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            ربط التقنية العالمية بالعقلية العربية
-          </p>
-        </div>
+          <article
+            class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+          >
+            <IconGlobe
+              class="w-12 h-12 text-emerald-600 mb-4"
+              aria-hidden="true"
+            />
+            <h3 class="text-xl font-semibold mb-2 dark:text-white">
+              جسر معرفي
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              ربط التقنية العالمية بالثقافة العربية وتقديم حلول تناسب احتياجاتنا
+            </p>
+          </article>
 
-        <div
-          class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-        >
-          <IconBulb class="w-12 h-12 text-amber-600 mb-4" />
-          <h3 class="text-xl font-semibold mb-2 dark:text-white">
-            إبداع منهجي
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            محتوى مدعوم بأحدث المنهجيات التعليمية
-          </p>
-        </div>
+          <article
+            class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+          >
+            <IconBulb
+              class="w-12 h-12 text-amber-600 mb-4"
+              aria-hidden="true"
+            />
+            <h3 class="text-xl font-semibold mb-2 dark:text-white">
+              إبداع منهجي
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              محتوى تعليمي مدعوم بأحدث المنهجيات التربوية والتقنية المتطورة
+            </p>
+          </article>
 
-        <div
-          class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-        >
-          <IconBook class="w-12 h-12 text-purple-600 mb-4" />
-          <h3 class="text-xl font-semibold mb-2 dark:text-white">
-            مكتبة رقمية
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            موارد تعليمية متجددة لكل المستويات
-          </p>
+          <article
+            class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+          >
+            <IconBook
+              class="w-12 h-12 text-purple-600 mb-4"
+              aria-hidden="true"
+            />
+            <h3 class="text-xl font-semibold mb-2 dark:text-white">
+              مكتبة رقمية شاملة
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              موارد تعليمية متجددة تغطي جميع المستويات من المبتدئ إلى المحترف
+            </p>
+          </article>
         </div>
-      </div>
+      </section>
 
       <!-- Mission Statement -->
-      <div class="bg-blue-50 dark:bg-gray-700 rounded-2xl p-8 mb-16">
+      <section class="bg-blue-50 dark:bg-gray-700 rounded-2xl p-8 mb-16">
         <div class="max-w-4xl mx-auto text-center">
           <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">
             مهمتنا: تمكين العقل العربي رقمياً
           </h2>
           <p class="text-lg text-gray-600 dark:text-gray-300">
-            نصنع محتوى تقنياً يُواكب السرعة التكنولوجية ويحافظ على الهوية
-            الثقافية، عبر مزج الدقة العلمية مع بساطة الشرح لبناء مجتمع تقني عربي
-            واعٍ.
+            نسعى لبناء مجتمع تقني عربي واعٍ من خلال إنتاج محتوى عالي الجودة
+            يُواكب السرعة التكنولوجية ويحافظ على الهوية الثقافية، عبر مزج الدقة
+            العلمية مع بساطة الشرح والتطبيق العملي.
           </p>
         </div>
-      </div>
+      </section>
 
       <!-- Content Pillars -->
-      <div class="grid lg:grid-cols-3 gap-8 mb-20">
+      <section class="grid lg:grid-cols-3 gap-8 mb-20">
         <div class="lg:col-span-2">
-          <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg">
-            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-              أركان محتوانا
-            </h3>
+          <article class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+              أركان محتوانا التقني
+            </h2>
             <div class="space-y-6">
               <div class="flex items-start gap-4">
                 <div class="bg-blue-100 dark:bg-gray-700 p-3 rounded-lg">
@@ -111,34 +177,170 @@ const allPosts = await getCollection("blog");
                   >
                 </div>
                 <div>
-                  <h4 class="font-semibold text-gray-800 dark:text-white mb-2">
+                  <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
                     شروحات تقنية عملية
-                  </h4>
+                  </h3>
                   <p class="text-gray-600 dark:text-gray-400">
-                    تحويل النظريات إلى خطوات تنفيذية
+                    تحويل النظريات المعقدة إلى خطوات تنفيذية قابلة للتطبيق مع
+                    أمثلة عملية
                   </p>
                 </div>
               </div>
-              <!-- Repeat similar blocks for other pillars -->
+
+              <div class="flex items-start gap-4">
+                <div class="bg-emerald-100 dark:bg-gray-700 p-3 rounded-lg">
+                  <span class="text-emerald-600 dark:text-emerald-400 font-bold"
+                    >٢</span
+                  >
+                </div>
+                <div>
+                  <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                    تحليل التقنيات الحديثة
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    مراجعة وتحليل أحدث التقنيات والأدوات في عالم البرمجة
+                    والتطوير
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="bg-amber-100 dark:bg-gray-700 p-3 rounded-lg">
+                  <span class="text-amber-600 dark:text-amber-400 font-bold"
+                    >٣</span
+                  >
+                </div>
+                <div>
+                  <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                    مسارات تعليمية متكاملة
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    برامج تعليمية مدروسة تأخذك من المبتدئ إلى المحترف خطوة بخطوة
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="bg-purple-100 dark:bg-gray-700 p-3 rounded-lg">
+                  <span class="text-purple-600 dark:text-purple-400 font-bold"
+                    >٤</span
+                  >
+                </div>
+                <div>
+                  <h3 class="font-semibold text-gray-800 dark:text-white mb-2">
+                    مجتمع تفاعلي
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    بناء مجتمع من المطورين والمهتمين بالتقنية لتبادل الخبرات
+                    والمعرفة
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          </article>
         </div>
 
-        <div class="bg-emerald-50 dark:bg-gray-700 rounded-2xl p-8 shadow-lg">
-          <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-            بالأرقام
-          </h3>
+        <aside class="bg-emerald-50 dark:bg-gray-700 rounded-2xl p-8 shadow-lg">
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+            إنجازاتنا بالأرقام
+          </h2>
           <div class="space-y-6">
             <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-xl">
               <p class="text-4xl font-bold text-emerald-600 mb-2">
-                {allPosts.length}
+                {allPosts.length}+
               </p>
-              <p class="text-gray-600 dark:text-gray-400">مقالة تقنية</p>
+              <p class="text-gray-600 dark:text-gray-400">مقالة تقنية متخصصة</p>
             </div>
-            <!-- Add more stats blocks -->
+
+            <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-xl">
+              <p class="text-4xl font-bold text-blue-600 mb-2">10K+</p>
+              <p class="text-gray-600 dark:text-gray-400">قارئ شهرياً</p>
+            </div>
+
+            <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-xl">
+              <p class="text-4xl font-bold text-purple-600 mb-2">50+</p>
+              <p class="text-gray-600 dark:text-gray-400">موضوع تقني مغطى</p>
+            </div>
+
+            <div class="text-center p-4 bg-white dark:bg-gray-800 rounded-xl">
+              <p class="text-4xl font-bold text-amber-600 mb-2">2024</p>
+              <p class="text-gray-600 dark:text-gray-400">سنة التأسيس</p>
+            </div>
           </div>
+        </aside>
+      </section>
+
+      <!-- FAQ Section for SEO -->
+      <section
+        class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg mb-16"
+      >
+        <h2
+          class="text-2xl font-bold text-gray-800 dark:text-white mb-8 text-center"
+        >
+          الأسئلة الشائعة
+        </h2>
+        <div class="max-w-4xl mx-auto space-y-6">
+          <details class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+            <summary
+              class="font-semibold text-gray-800 dark:text-white cursor-pointer"
+            >
+              ما هو الهدف من هذه المنصة؟
+            </summary>
+            <p class="mt-4 text-gray-600 dark:text-gray-400">
+              نهدف إلى تبسيط التقنية وجعلها متاحة للجميع باللغة العربية، مع
+              التركيز على المحتوى العملي والتطبيقي.
+            </p>
+          </details>
+
+          <details class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+            <summary
+              class="font-semibold text-gray-800 dark:text-white cursor-pointer"
+            >
+              ما نوع المحتوى الذي تقدمونه؟
+            </summary>
+            <p class="mt-4 text-gray-600 dark:text-gray-400">
+              نقدم مقالات تقنية، دروس تعليمية، مراجعات للأدوات، وأدلة عملية في
+              مجالات البرمجة والتطوير والتقنية بشكل عام.
+            </p>
+          </details>
+
+          <details class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+            <summary
+              class="font-semibold text-gray-800 dark:text-white cursor-pointer"
+            >
+              هل المحتوى مناسب للمبتدئين؟
+            </summary>
+            <p class="mt-4 text-gray-600 dark:text-gray-400">
+              نعم، نقدم محتوى متدرج يناسب جميع المستويات من المبتدئين إلى
+              المحترفين، مع شرح المفاهيم بطريقة مبسطة.
+            </p>
+          </details>
         </div>
-      </div>
+      </section>
+
+      <!-- Contact CTA -->
+      <section
+        class="text-center bg-gradient-to-r from-blue-600 to-emerald-600 rounded-2xl p-8 text-white"
+      >
+        <h2 class="text-2xl font-bold mb-4">انضم إلى مجتمعنا التقني</h2>
+        <p class="text-lg mb-6">
+          كن جزءاً من رحلتنا في بناء مستقبل تقني عربي مشرق
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="/contact"
+            class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+          >
+            تواصل معنا
+          </a>
+          <a
+            href="/newsletter"
+            class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
+          >
+            اشترك في النشرة
+          </a>
+        </div>
+      </section>
     </div>
   </div>
 </Layout>
