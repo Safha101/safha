@@ -1,8 +1,10 @@
-<script>
-  import { initFlowbite } from "flowbite";
+---
+// src/components/FlowbiteInit.astro
+import { initFlowbite } from "flowbite";
+---
 
-  // Initialize on page load
-  document.addEventListener("DOMContentLoaded", () => {
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
     initFlowbite();
   });
 </script>
