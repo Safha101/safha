@@ -75,12 +75,24 @@ import Headings from "../components/Headings.astro";
 
   function updateHiddenContent() {
     const editor = document.getElementById("editorContent");
-    document.getElementById("hiddenContent").value = editor.innerHTML;
+    const content = editor.innerHTML;
+    document.getElementById("hiddenContent").value = content;
+
+    // Trigger word count update
+    if (typeof window.updateWordCount === "function") {
+      window.updateWordCount(content);
+    }
   }
 
+  // Listen for input changes
   document
     .getElementById("editorContent")
     .addEventListener("input", updateHiddenContent);
+
+  // Initialize on load
+  document.addEventListener("DOMContentLoaded", function () {
+    updateHiddenContent();
+  });
 </script>
 
 <script is:inline>

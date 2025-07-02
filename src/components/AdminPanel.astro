@@ -4,264 +4,980 @@ import RichTextEditor from "./RichTextEditor.astro";
 // at top of your component
 const isDev = import.meta.env.DEV;
 const now = new Date();
-const { existingContent } = Astro.props;
+const { existingContent, editMode = false, postData = null } = Astro.props;
 ---
 
 {
   isDev && (
-    <div class="p-4 sm:p-8 bg-snow-white dark:bg-dark-navy rounded-xl shadow-lg my-6 border border-morning-fog/50 dark:border-deep-ocean/50 transition-all duration-300">
-      <header class="mb-8">
-        <h2 class="text-2xl font-bold text-sky-blue dark:text-royal-periwinkle flex items-center gap-2 pb-4 border-b border-morning-fog/30 dark:border-deep-ocean/50">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-          </svg>
-          إنشاء مدونة جديد
-        </h2>
-      </header>
+    <div class="admin-container p-4 sm:p-8 bg-snow-white dark:bg-dark-navy rounded-xl shadow-lg my-6 border border-morning-fog/50 dark:border-deep-ocean/50 transition-all duration-300">
+      {/* <!-- Navigation Tabs --> */}
+      <nav class="mb-6 border-b border-morning-fog/30 dark:border-deep-ocean/50">
+        <div class="flex space-x-8 rtl:space-x-reverse">
+          <button
+            class="nav-tab active py-3 px-1 border-b-2 border-sky-blue dark:border-royal-periwinkle text-sky-blue dark:text-royal-periwinkle font-medium"
+            data-tab="create"
+          >
+            {editMode ? "تعديل المدونة" : "إنشاء مدونة جديد"}
+          </button>
+          <button
+            class="nav-tab py-3 px-1 border-b-2 border-transparent text-mountain-mist dark:text-morning-fog/70 hover:text-sky-blue dark:hover:text-royal-periwinkle font-medium"
+            data-tab="manage"
+          >
+            إدارة المدونات
+          </button>
+          <button
+            class="nav-tab py-3 px-1 border-b-2 border-transparent text-mountain-mist dark:text-morning-fog/70 hover:text-sky-blue dark:hover:text-royal-periwinkle font-medium"
+            data-tab="settings"
+          >
+            الإعدادات
+          </button>
+        </div>
+      </nav>
 
-      <form id="createPostForm" class="space-y-8">
-        {/* Main Content Section */}
-        <section class="space-y-8">
-          {/* Title Group */}
+      {/* <!-- Create/Edit Post Tab --> */}
+      <div id="create-tab" class="tab-content">
+        <header class="mb-8 flex justify-between items-center">
+          <h2 class="text-2xl font-bold text-sky-blue dark:text-royal-periwinkle flex items-center gap-2">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+            </svg>
+            {editMode ? "تعديل المدونة" : "إنشاء مدونة جديد"}
+          </h2>
 
-          {/* Slug & Title & Description */}
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* title */}
-            <div class="space-y-2">
-              <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-                العنوان
-              </label>
-              <input
-                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
-                type="text"
-                name="title"
-                placeholder="عنوان المدونة"
-                required
-              />
-            </div>
-            {/* Optional meta */}
-            <div>
-              <label class="block text-mountain-mist dark:text-morning-fog/80 font-medium mb-2">
-                المؤلف (اختياري)
-              </label>
-              <input
-                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
-                type="text"
-                name="author"
-                placeholder="اسم المؤلف"
-              />
-            </div>
-            {/* slug */}
-            <div>
-              <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-                الرابط المختصر (Slug)
-              </label>
-              <input
-                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle dark:text-morning-fog/70 bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
-                type="text"
-                name="slug"
-                placeholder="my-blog-post"
-                required
-              />
-              <p class="mt-2 text-sm text-mountain-mist dark:text-morning-fog/70">
-                أحرف صغيرة، أرقام، وشرطات فقط
-              </p>
-            </div>
+          {/* <!-- Action Buttons --> */}
+          <div class="flex gap-3">
+            <button
+              type="button"
+              id="saveAsDraft"
+              class="px-4 py-2 bg-amber-glow/20 text-amber-glow border border-amber-glow/50 rounded-lg hover:bg-amber-glow/30 transition-colors"
+            >
+              حفظ كمسودة
+            </button>
+            <button
+              type="button"
+              id="previewPost"
+              class="px-4 py-2 bg-sky-blue/10 text-sky-blue dark:bg-royal-periwinkle/10 dark:text-royal-periwinkle border border-sky-blue/30 dark:border-royal-periwinkle/30 rounded-lg hover:bg-sky-blue/20 dark:hover:bg-royal-periwinkle/20 transition-colors"
+            >
+              معاينة
+            </button>
+            <button
+              type="button"
+              id="resetForm"
+              class="px-4 py-2 bg-mountain-mist/10 text-mountain-mist border border-mountain-mist/30 rounded-lg hover:bg-mountain-mist/20 transition-colors"
+            >
+              إعادة تعيين
+            </button>
           </div>
-          {/* Date Inputs */}
-          <div class="space-y-6 p-6 bg-white/30 dark:bg-deep-ocean/20 rounded-xl border border-morning-fog/20 dark:border-deep-ocean/30">
-            <h3 class="text-sm font-semibold text-sky-blue dark:text-royal-periwinkle mb-4">
-              تاريخ النشر
-            </h3>
+        </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/** Year */}
-              <div>
+        {/* <!-- Auto-save indicator --> */}
+        <div
+          id="autoSaveIndicator"
+          class="hidden mb-4 p-3 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-lg border border-green-200 dark:border-green-800"
+        >
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <span class="text-sm">تم الحفظ التلقائي</span>
+            <span id="autoSaveTime" class="text-xs opacity-70" />
+          </div>
+        </div>
+
+        <form id="createPostForm" class="space-y-8">
+          {/* Main Content Section */}
+          <section class="space-y-8">
+            {/* Enhanced Title Group with Auto-slug */}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="space-y-2">
                 <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-                  السنة
-                </label>
-                <input
-                  class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
-                  type="number"
-                  name="year"
-                  placeholder="2026"
-                  value={now.getFullYear()}
-                  required
-                />
-              </div>
-              {/** Month */}
-              <div>
-                <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-                  الشهر
-                </label>
-                <input
-                  class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
-                  type="number"
-                  name="month"
-                  min="1"
-                  max="12"
-                  placeholder="1-12"
-                  value={now.getMonth() + 1}
-                  required
-                />
-              </div>
-              {/** Day */}
-              <div>
-                <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-                  اليوم
-                </label>
-                <input
-                  class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
-                  type="number"
-                  name="day"
-                  min="1"
-                  max="31"
-                  placeholder="1-31"
-                  value={now.getDate()}
-                  required
-                />
-              </div>
-              <div>
-                <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-                  التاريخ الهجري (اختياري)
+                  العنوان *
                 </label>
                 <input
                   class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
                   type="text"
-                  name="arabicDate"
-                  placeholder="١ رمضان ١٤٤٥"
+                  name="title"
+                  id="titleInput"
+                  placeholder="عنوان المدونة"
+                  value={postData?.title || ""}
+                  required
                 />
+                <div
+                  id="titleCounter"
+                  class="text-xs text-mountain-mist dark:text-morning-fog/50"
+                >
+                  0 حرف
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-mountain-mist dark:text-morning-fog/80 font-medium mb-2">
+                  المؤلف (اختياري)
+                </label>
+                <input
+                  class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                  type="text"
+                  name="author"
+                  value={postData?.author || ""}
+                  placeholder="اسم المؤلف"
+                />
+              </div>
+
+              <div>
+                <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                  الرابط المختصر (Slug) *
+                </label>
+                <div class="relative">
+                  <input
+                    class="w-full px-4 py-2 pr-10 border border-morning-fog dark:border-deep-ocean rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle dark:text-morning-fog/70 bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                    type="text"
+                    name="slug"
+                    id="slugInput"
+                    placeholder="my-blog-post"
+                    pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    value={postData?.slug || ""}
+                    required
+                  />
+                  <button
+                    type="button"
+                    id="generateSlug"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sky-blue dark:text-royal-periwinkle hover:text-sky-blue/70 dark:hover:text-royal-periwinkle/70"
+                    title="توليد الرابط تلقائياً"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                  </button>
+                </div>
+                <p class="mt-2 text-sm text-mountain-mist dark:text-morning-fog/70">
+                  أحرف صغيرة، أرقام، وشرطات فقط
+                </p>
+                <div
+                  id="slugPreview"
+                  class="mt-1 text-xs text-sky-blue dark:text-royal-periwinkle"
+                />
+              </div>
+            </div>
+
+            {/* Enhanced Date Inputs with Quick Options */}
+            <div class="space-y-6 p-6 bg-white/30 dark:bg-deep-ocean/20 rounded-xl border border-morning-fog/20 dark:border-deep-ocean/30">
+              <div class="flex justify-between items-center">
+                <h3 class="text-sm font-semibold text-sky-blue dark:text-royal-periwinkle">
+                  تاريخ النشر
+                </h3>
+                <div class="flex gap-2">
+                  <button
+                    type="button"
+                    id="setToday"
+                    class="text-xs px-3 py-1 bg-sky-blue/10 text-sky-blue rounded-md hover:bg-sky-blue/20"
+                  >
+                    اليوم
+                  </button>
+                  <button
+                    type="button"
+                    id="schedulePost"
+                    class="text-xs px-3 py-1 bg-amber-glow/10 text-amber-glow rounded-md hover:bg-amber-glow/20"
+                  >
+                    جدولة
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                    السنة
+                  </label>
+                  <input
+                    class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                    type="number"
+                    name="year"
+                    placeholder="2026"
+                    value={postData?.year || now.getFullYear()}
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                    الشهر
+                  </label>
+                  <input
+                    class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                    type="number"
+                    name="month"
+                    min="1"
+                    max="12"
+                    placeholder="1-12"
+                    value={postData?.month || now.getMonth() + 1}
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                    اليوم
+                  </label>
+                  <input
+                    class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                    type="number"
+                    name="day"
+                    min="1"
+                    max="31"
+                    placeholder="1-31"
+                    value={postData?.day || now.getDate()}
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                    التاريخ الهجري (اختياري)
+                  </label>
+                  <input
+                    class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                    type="text"
+                    name="arabicDate"
+                    value={postData?.arabicDate || ""}
+                    placeholder="١ رمضان ١٤٤٥"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Enhanced Description with Counter */}
+            <div>
+              <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                الوصف المختصر *
+              </label>
+              <textarea
+                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent resize-y placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                name="description"
+                id="descriptionInput"
+                placeholder="وصف قصير للمدونة (مُحسن لمحركات البحث)"
+                rows={3}
+                maxlength="160"
+                required
+              >
+                {postData?.description || ""}
+              </textarea>
+              <div class="flex justify-between text-xs text-mountain-mist dark:text-morning-fog/50 mt-1">
+                <span id="descriptionCounter">0/160 حرف</span>
+                <span id="seoIndicator" class="text-amber-glow">
+                  ⚠️ قصير جداً لـ SEO
+                </span>
+              </div>
+            </div>
+
+            {/* Enhanced Tags and Categories */}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                  الوسوم
+                </label>
+                <input
+                  class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                  type="text"
+                  name="tags"
+                  id="tagsInput"
+                  placeholder="تقنية, برمجة"
+                  value={
+                    postData?.tags
+                      ? Array.isArray(postData.tags)
+                        ? postData.tags.join(", ")
+                        : postData.tags
+                      : ""
+                  }
+                />
+                <div id="selectedTags" class="flex flex-wrap gap-2 mt-2" />
+              </div>
+              <div>
+                <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
+                  التصنيفات
+                </label>
+                <input
+                  class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
+                  type="text"
+                  name="categories"
+                  id="categoriesInput"
+                  placeholder="مقالات, دروس"
+                  value={
+                    postData?.categories
+                      ? Array.isArray(postData.categories)
+                        ? postData.categories.join(", ")
+                        : postData.categories
+                      : ""
+                  }
+                />
+                <div
+                  id="selectedCategories"
+                  class="flex flex-wrap gap-2 mt-2"
+                />
+              </div>
+            </div>
+          </section>
+
+          {/* Enhanced Draft Toggle with SEO Preview */}
+          <div class="space-y-4">
+            <div class="flex items-center gap-3 p-3 bg-amber-glow/5 dark:bg-amber-glow/10 rounded-lg border border-amber-glow/20">
+              <input
+                class="form-checkbox h-5 w-5 text-royal-periwinkle dark:text-sky-blue border-2 border-gray-300 dark:border-gray-500 rounded-md focus:ring-2 focus:ring-sky-blue/30 dark:focus:ring-royal-periwinkle/30 bg-white/50 dark:bg-deep-ocean/20"
+                type="checkbox"
+                name="draft"
+                id="draft"
+                value="true"
+                checked={postData?.draft}
+              />
+              <label
+                for="draft"
+                class="text-sm font-medium text-deep-ocean dark:text-morning-fog/90"
+              >
+                وضع كمُسودة
+              </label>
+            </div>
+
+            {/* <!-- SEO Preview --> */}
+            <div
+              id="seoPreview"
+              class="p-4 bg-white/50 dark:bg-deep-ocean/30 rounded-lg border border-morning-fog/30 dark:border-deep-ocean/50"
+            >
+              <h4 class="text-sm font-semibold text-sky-blue dark:text-royal-periwinkle mb-3">
+                معاينة نتائج البحث
+              </h4>
+              <div class="space-y-2">
+                <div
+                  id="seoTitle"
+                  class="text-blue-600 dark:text-blue-400 text-lg font-medium truncate"
+                >
+                  عنوان المدونة
+                </div>
+                <div
+                  id="seoUrl"
+                  class="text-green-600 dark:text-green-400 text-sm"
+                >
+                  safha.dev/blog/slug
+                </div>
+                <div
+                  id="seoDescription"
+                  class="text-gray-600 dark:text-gray-400 text-sm"
+                >
+                  وصف المدونة يظهر هنا...
+                </div>
               </div>
             </div>
           </div>
 
+          {/* Enhanced Content Editor */}
           <div>
             <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-              الوصف المختصر
+              المحتوى *
             </label>
-            <textarea
-              class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent resize-y placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
-              name="description"
-              placeholder="وصف قصير للمدونة"
-              rows={2}
-              required
-            />
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-                الوسوم (فصل بفواصل)
-              </label>
-              <input
-                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
-                type="text"
-                name="tags"
-                placeholder="تقنية, برمجة"
+            <div class="border border-morning-fog dark:border-deep-ocean rounded-lg overflow-hidden">
+              <RichTextEditor
+                content={existingContent || postData?.content || ""}
               />
             </div>
-            <div>
-              <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-                التصنيفات (فصل بفواصل)
-              </label>
-              <input
-                class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent placeholder:text-mountain-mist/50 dark:placeholder:text-morning-fog/40"
-                type="text"
-                name="categories"
-                placeholder="مقالات, دروس"
-              />
+
+            <div class="flex justify-between text-xs text-mountain-mist dark:text-morning-fog/50 mt-2">
+              <span id="wordCount">0 كلمة</span>
+              <span id="readingTime">وقت القراءة: 0 دقيقة</span>
             </div>
           </div>
-        </section>
 
-        {/* Draft Toggle */}
-        <div class="flex items-center gap-3 p-3 bg-amber-glow/5 dark:bg-amber-glow/10 rounded-lg border border-amber-glow/20">
-          <input
-            class="form-checkbox h-5 w-5 text-royal-periwinkle dark:text-sky-blue border-2 border-gray-300 dark:border-gray-500 rounded-md focus:ring-2 focus:ring-sky-blue/30 dark:focus:ring-royal-periwinkle/30 bg-white/50 dark:bg-deep-ocean/20"
-            type="checkbox"
-            name="draft"
-            id="draft"
-            value="true"
-          />
-          <label
-            for="draft"
-            class="text-sm font-medium text-deep-ocean dark:text-morning-fog/90"
-          >
-            وضع كمُسودة
-          </label>
-        </div>
-        <div>
-          <label class="block text-deep-ocean dark:text-morning-fog font-medium mb-2">
-            المحتوى
-          </label>
-          {/* <textarea
-            class="w-full px-4 py-2 border border-morning-fog dark:border-deep-ocean dark:text-morning-fog/70 rounded-lg focus:ring-2 focus:ring-sky-blue dark:focus:ring-royal-periwinkle bg-transparent resize-y"
-            name="content"
-            rows={8}
-            required
-          /> */}
+          {/* Enhanced Submit Button */}
+          <div class="flex gap-4">
+            <button
+              type="submit"
+              id="publishBtn"
+              class="flex-1 py-3.5 px-6 bg-royal-periwinkle dark:bg-sky-blue text-white/90 dark:text-white rounded-xl hover:bg-royal-periwinkle/90 dark:hover:bg-sky-blue/90 transition-all duration-200 font-medium flex items-center justify-center gap-2 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              <span id="submitText">
+                {editMode ? "تحديث المدونة" : "نشر المدونة"}
+              </span>
+            </button>
 
-          <RichTextEditor content={existingContent || ""} />
-        </div>
-        <button
-          type="submit"
-          class="w-full py-3.5 px-6 bg-royal-periwinkle dark:bg-sky-blue text-white/90 dark:text-white rounded-xl hover:bg-royal-periwinkle/90 dark:hover:bg-sky-blue/90 transition-all duration-200 font-medium flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+            {editMode && (
+              <button
+                type="button"
+                id="deleteBtn"
+                class="px-6 py-3.5 bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/20 transition-all duration-200 font-medium"
+              >
+                حذف المدونة
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+
+      {/* <!-- Manage Posts Tab --> */}
+      <div id="manage-tab" class="tab-content hidden">
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-sky-blue dark:text-royal-periwinkle">
+              إدارة المدونات
+            </h2>
+            <div class="flex gap-3">
+              <input
+                type="search"
+                id="searchPosts"
+                placeholder="البحث في المدونات..."
+                class="px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg bg-transparent"
+              />
+              <select
+                id="filterStatus"
+                class="px-4 py-2 border border-morning-fog dark:border-deep-ocean rounded-lg bg-transparent"
+              >
+                <option value="all">جميع المدونات</option>
+                <option value="published">منشورة</option>
+                <option value="draft">مسودات</option>
+              </select>
+            </div>
+          </div>
+
+          <div
+            id="postsGrid"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          إنشاء المدونة
-        </button>
-      </form>
+            <div class="text-center py-8 text-mountain-mist dark:text-morning-fog/70">
+              جاري تحميل المدونات...
+            </div>
+          </div>
+
+          <div id="pagination" class="flex justify-center">
+            {/* <!-- Pagination will be added here --> */}
+          </div>
+        </div>
+      </div>
+
+      {/* <!-- Settings Tab --> */}
+      <div id="settings-tab" class="tab-content hidden">
+        <h2 class="text-2xl font-bold text-sky-blue dark:text-royal-periwinkle mb-6">
+          إعدادات المدونة
+        </h2>
+
+        <div class="space-y-6">
+          <div class="p-6 bg-white/30 dark:bg-deep-ocean/20 rounded-xl">
+            <h3 class="text-lg font-semibold mb-4">إعدادات عامة</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-2">
+                  مسار حفظ المدونات
+                </label>
+                <input
+                  type="text"
+                  value="src/content/blog/"
+                  class="w-full px-4 py-2 border rounded-lg bg-transparent"
+                  readonly
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">
+                  الحفظ التلقائي
+                </label>
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" id="autoSaveEnabled" checked />
+                  <span>تفعيل الحفظ التلقائي كل 30 ثانية</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 bg-white/30 dark:bg-deep-ocean/20 rounded-xl">
+            <h3 class="text-lg font-semibold mb-4">النسخ الاحتياطي</h3>
+            <div class="flex gap-4">
+              <button class="px-4 py-2 bg-sky-blue/10 text-sky-blue border border-sky-blue/30 rounded-lg">
+                إنشاء نسخة احتياطية
+              </button>
+              <button class="px-4 py-2 bg-amber-glow/10 text-amber-glow border border-amber-glow/30 rounded-lg">
+                استيراد نسخة احتياطية
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
 
-<script>
-  document
-    .getElementById("createPostForm")
-    ?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      // slug live validity
-      const slugEl = form.slug;
-      if (!new RegExp(slugEl.pattern).test(slugEl.value)) {
-        slugEl.setCustomValidity("الرابط المختصر غير صالح");
-        slugEl.reportValidity();
-        return;
-      }
+<!-- Preview Modal -->
+<div
+  id="previewModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden"
+>
+  <div
+    class="bg-white dark:bg-dark-navy rounded-xl max-w-4xl max-h-[90vh] overflow-y-auto m-4 w-full"
+  >
+    <div
+      class="p-6 border-b border-morning-fog/30 dark:border-deep-ocean/50 flex justify-between items-center"
+    >
+      <h3 class="text-xl font-bold">معاينة المدونة</h3>
+      <button
+        id="closePreview"
+        class="text-mountain-mist hover:text-deep-ocean dark:hover:text-morning-fog"
+      >
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+          ></path>
+        </svg>
+      </button>
+    </div>
+    <div id="previewContent" class="p-6">
+      <!-- Preview content will be rendered here -->
+    </div>
+  </div>
+</div>
 
-      // Build payload
-      const fd = new FormData(form);
-      const payload = Object.fromEntries(fd.entries());
-      // Note: draft checkbox only included if checked; ensure default false:
-      if (!payload.draft) payload.draft = "false";
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Tab switching functionality
+    const tabs = document.querySelectorAll(".nav-tab");
+    const tabContents = document.querySelectorAll(".tab-content");
 
-      try {
-        const res = await fetch("/api/create-post", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        const json = await res.json();
-        if (json.success) {
-          alert(`تم الإنشاء: ${json.filePath}`);
-          form.reset();
-        } else {
-          throw new Error(json.error);
-        }
-      } catch (err) {
-        alert(`خطأ: ${err.message}`);
-      }
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", function () {
+        const targetTab = this.getAttribute("data-tab");
+
+        // Remove active class from all tabs
+        tabs.forEach((t) => t.classList.remove("active"));
+        // Add active class to clicked tab
+        this.classList.add("active");
+
+        // Hide all tab contents
+        tabContents.forEach((content) => content.classList.add("hidden"));
+        // Show target tab content
+        document.getElementById(`${targetTab}-tab`).classList.remove("hidden");
+      });
     });
+
+    // Enhanced functionality
+    initializeEnhancedFeatures();
+
+    function initializeEnhancedFeatures() {
+      const titleInput = document.getElementById("titleInput");
+      const slugInput = document.getElementById("slugInput");
+      const descriptionInput = document.getElementById("descriptionInput");
+      const generateSlugBtn = document.getElementById("generateSlug");
+      const titleCounter = document.getElementById("titleCounter");
+      const descriptionCounter = document.getElementById("descriptionCounter");
+      const seoIndicator = document.getElementById("seoIndicator");
+      const setTodayBtn = document.getElementById("setToday");
+      const resetFormBtn = document.getElementById("resetForm");
+      const previewBtn = document.getElementById("previewPost");
+      const closePreviewBtn = document.getElementById("closePreview");
+      const previewModal = document.getElementById("previewModal");
+      const wordCountEl = document.getElementById("wordCount");
+      const readingTimeEl = document.getElementById("readingTime");
+      const saveAsDraftBtn = document.getElementById("saveAsDraft");
+      const publishBtn = document.getElementById("publishBtn");
+      const form = document.getElementById("createPostForm");
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          // Slug validation
+          const slugEl = form.slug;
+          if (!new RegExp(slugEl.pattern).test(slugEl.value)) {
+            slugEl.setCustomValidity("الرابط المختصر غير صالح");
+            slugEl.reportValidity();
+            return;
+          }
+
+          // Build payload
+          const fd = new FormData(form);
+          const payload = Object.fromEntries(fd.entries());
+
+          // Handle draft checkbox (only included if checked)
+          if (!payload.draft) payload.draft = "false";
+
+          // Get rich text editor content
+          if (window.RichTextEditor && window.RichTextEditor.getContent) {
+            payload.content = window.RichTextEditor.getContent();
+          }
+
+          // Show loading state
+          const submitBtn = document.getElementById("publishBtn");
+          const originalText =
+            submitBtn.querySelector("#submitText").textContent;
+          submitBtn.disabled = true;
+          submitBtn.querySelector("#submitText").textContent = "جاري النشر...";
+
+          try {
+            const res = await fetch("/api/create-post", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+
+            const json = await res.json();
+
+            if (json.success) {
+              alert(`تم الإنشاء: ${json.filePath}`);
+              form.reset();
+              // Reset word count and other UI elements
+              if (window.updateWordCount) window.updateWordCount("");
+              updateSEOPreview();
+            } else {
+              throw new Error(json.error);
+            }
+          } catch (err) {
+            alert(`خطأ: ${err.message}`);
+          } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.querySelector("#submitText").textContent = originalText;
+          }
+        });
+      }
+
+      // Update the save as draft button to trigger form submission
+      if (saveAsDraftBtn) {
+        saveAsDraftBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          const draftCheckbox = document.getElementById("draft");
+          if (draftCheckbox) draftCheckbox.checked = true;
+
+          // Trigger form submission
+          form.dispatchEvent(new Event("submit"));
+        });
+      }
+
+      // Update the publish button to trigger form submission
+      if (publishBtn) {
+        publishBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          const draftCheckbox = document.getElementById("draft");
+          if (draftCheckbox) draftCheckbox.checked = false;
+
+          // Trigger form submission
+          form.dispatchEvent(new Event("submit"));
+        });
+      }
+
+      // Title input counter
+      if (titleInput && titleCounter) {
+        titleInput.addEventListener("input", function () {
+          titleCounter.textContent = this.value.length + " حرف";
+        });
+        // Initialize counter
+        titleCounter.textContent = titleInput.value.length + " حرف";
+      }
+
+      // Description counter and SEO indicator
+      if (descriptionInput && descriptionCounter && seoIndicator) {
+        const updateDescriptionSEO = () => {
+          const length = descriptionInput.value.length;
+          descriptionCounter.textContent = length + "/160 حرف";
+
+          if (length < 50) {
+            seoIndicator.textContent = "⚠️ قصير جداً لـ SEO";
+            seoIndicator.className = "text-red-500";
+          } else if (length < 120) {
+            seoIndicator.textContent = "✅ جيد لـ SEO";
+            seoIndicator.className = "text-green-500";
+          } else if (length <= 160) {
+            seoIndicator.textContent = "⚡ ممتاز لـ SEO";
+            seoIndicator.className = "text-blue-500";
+          } else {
+            seoIndicator.textContent = "⚠️ تجاوز الحد المسموح";
+            seoIndicator.className = "text-amber-500";
+          }
+        };
+
+        descriptionInput.addEventListener("input", updateDescriptionSEO);
+        // Initialize
+        updateDescriptionSEO();
+      }
+
+      // Auto-generate slug
+      if (generateSlugBtn && titleInput && slugInput) {
+        generateSlugBtn.addEventListener("click", function () {
+          const title = titleInput.value;
+          const slug = title
+            .toLowerCase()
+            .replace(/[^a-z0-9\u0600-\u06FF\s-]/g, "") // Allow Arabic and English
+            .replace(/\s+/g, "-") // Replace spaces with hyphens
+            .replace(/-+/g, "-") // Replace multiple hyphens with single
+            .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
+
+          if (slug) {
+            slugInput.value = slug;
+            updateSlugPreview();
+          }
+        });
+      }
+
+      // Slug preview
+      function updateSlugPreview() {
+        const slugPreview = document.getElementById("slugPreview");
+        const slug = slugInput?.value;
+        if (slugPreview && slug) {
+          slugPreview.textContent = "safha.dev/blog/" + slug;
+        }
+      }
+
+      if (slugInput) {
+        slugInput.addEventListener("input", updateSlugPreview);
+        updateSlugPreview(); // Initialize
+      }
+
+      // Set today's date
+      if (setTodayBtn) {
+        setTodayBtn.addEventListener("click", function () {
+          const now = new Date();
+          document.querySelector('input[name="year"]').value =
+            now.getFullYear();
+          document.querySelector('input[name="month"]').value =
+            now.getMonth() + 1;
+          document.querySelector('input[name="day"]').value = now.getDate();
+        });
+      }
+
+      // Reset form
+      if (resetFormBtn) {
+        resetFormBtn.addEventListener("click", function () {
+          if (
+            confirm(
+              "هل أنت متأكد أنك تريد إعادة تعيين النموذج؟ سيتم فقدان جميع التغييرات غير المحفوظة."
+            )
+          ) {
+            form.reset();
+            // Reset specific fields
+            if (titleInput) titleInput.value = "";
+            if (slugInput) slugInput.value = "";
+            if (descriptionInput) descriptionInput.value = "";
+
+            // Reset counters
+            if (titleCounter) titleCounter.textContent = "0 حرف";
+            if (descriptionCounter) {
+              descriptionCounter.textContent = "0/160 حرف";
+              seoIndicator.textContent = "⚠️ قصير جداً لـ SEO";
+              seoIndicator.className = "text-red-500";
+            }
+
+            // Reset word count
+            if (wordCountEl) wordCountEl.textContent = "0 كلمة";
+            if (readingTimeEl)
+              readingTimeEl.textContent = "وقت القراءة: 0 دقيقة";
+
+            // Reset slug preview
+            updateSlugPreview();
+          }
+        });
+      }
+
+      // Preview functionality
+      if (previewBtn) {
+        previewBtn.addEventListener("click", function () {
+          const title = titleInput?.value || "عنوان المدونة";
+          const content =
+            document.querySelector(".rich-text-content")?.innerHTML ||
+            "<p>المحتوى سيظهر هنا...</p>";
+
+          const previewContent = document.getElementById("previewContent");
+          if (previewContent) {
+            previewContent.innerHTML = `
+              <article class="prose prose-lg dark:prose-invert max-w-none">
+                <h1>${title}</h1>
+                <div>${content}</div>
+              </article>
+            `;
+          }
+          previewModal.classList.remove("hidden");
+        });
+      }
+
+      // Close preview
+      if (closePreviewBtn) {
+        closePreviewBtn.addEventListener("click", function () {
+          previewModal.classList.add("hidden");
+        });
+      }
+
+      // Click outside to close preview
+      previewModal?.addEventListener("click", function (e) {
+        if (e.target === previewModal) {
+          previewModal.classList.add("hidden");
+        }
+      });
+
+      // Word count functionality (to be called by RichTextEditor)
+      window.updateWordCount = function (content) {
+        if (!wordCountEl || !readingTimeEl) return;
+
+        // Strip HTML tags
+        const text = content.replace(/<[^>]*>/g, " ");
+        // Count words
+        const words = text
+          .replace(/[\u064B-\u065F\u0670]/g, "") // Remove Arabic diacritics
+          .replace(
+            /[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFFa-zA-Z0-9\s]/g,
+            " "
+          )
+          .split(/\s+/)
+          .filter((word) => word.length > 0);
+
+        const wordCount = words.length;
+
+        // Calculate reading time (200 words per minute)
+        const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+        wordCountEl.textContent = `${wordCount} كلمة`;
+        readingTimeEl.textContent = `وقت القراءة: ${readingTime} دقيقة`;
+      };
+      // Add color coding based on content length
+      if (wordCount < 300) {
+        wordCountEl.classList.add("text-amber-500");
+        wordCountEl.classList.remove("text-green-500");
+      } else {
+        wordCountEl.classList.add("text-green-500");
+        wordCountEl.classList.remove("text-amber-500");
+      }
+      if (titleInput) titleInput.addEventListener("input", updateSEOPreview);
+      if (slugInput) slugInput.addEventListener("input", updateSEOPreview);
+      if (descriptionInput)
+        descriptionInput.addEventListener("input", updateSEOPreview);
+      updateSEOPreview(); // Initialize
+    }
+
+    // Initialize word count with existing content
+    if (window.RichTextEditor && window.RichTextEditor.getContent) {
+      const initialContent = window.RichTextEditor.getContent();
+      window.updateWordCount(initialContent);
+    }
+
+    // Form submission handlers
+    if (saveAsDraftBtn) {
+      saveAsDraftBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        const draftCheckbox = document.getElementById("draft");
+        if (draftCheckbox) draftCheckbox.checked = true;
+        handleFormSubmit();
+      });
+    }
+
+    if (publishBtn) {
+      publishBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        const draftCheckbox = document.getElementById("draft");
+        if (draftCheckbox) draftCheckbox.checked = false;
+        handleFormSubmit();
+      });
+    }
+
+    function handleFormSubmit() {
+      // Show saving indicator
+      const indicator = document.getElementById("autoSaveIndicator");
+      if (indicator) {
+        indicator.classList.remove("hidden");
+        document.getElementById("autoSaveTime").textContent =
+          new Date().toLocaleTimeString();
+      }
+
+      // Simulate form submission
+      setTimeout(() => {
+        alert(editMode ? "تم تحديث المدونة بنجاح!" : "تم نشر المدونة بنجاح!");
+        if (indicator) indicator.classList.add("hidden");
+      }, 1500);
+    }
+
+    function updateSEOPreview() {
+      // Get elements directly by their IDs instead of using variables
+      const titleInput = document.getElementById("titleInput");
+      const slugInput = document.getElementById("slugInput");
+      const descriptionInput = document.getElementById("descriptionInput");
+      const seoTitle = document.getElementById("seoTitle");
+      const seoUrl = document.getElementById("seoUrl");
+      const seoDescription = document.getElementById("seoDescription");
+
+      if (titleInput && seoTitle) {
+        seoTitle.textContent = titleInput.value || "عنوان المدونة";
+      }
+
+      if (slugInput && seoUrl) {
+        seoUrl.textContent = `safha.dev/blog/${slugInput.value || "slug"}`;
+      }
+
+      if (descriptionInput && seoDescription) {
+        seoDescription.textContent =
+          descriptionInput.value || "وصف المدونة يظهر هنا...";
+      }
+    }
+
+    // Update SEO preview on input
+  });
 </script>
+
+<!-- Add this style section to enhance the UI -->
+<style>
+  .admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .nav-tab.active {
+    border-color: var(--sky-blue);
+    color: var(--sky-blue);
+  }
+
+  .tab-content.hidden {
+    display: none;
+  }
+
+  .rich-text-content {
+    min-height: 400px;
+    padding: 1.5rem;
+  }
+
+  /* SEO indicator colors */
+  .text-red-500 {
+    color: #ef4444;
+  }
+
+  .text-green-500 {
+    color: #22c55e;
+  }
+
+  .text-blue-500 {
+    color: #3b82f6;
+  }
+
+  .text-amber-500 {
+    color: #f59e0b;
+  }
+
+  /* Preview modal styles */
+  #previewModal {
+    transition: opacity 0.3s ease;
+  }
+
+  /* Loading spinner for manage posts */
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loading-spinner {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 3px solid rgba(59, 130, 246, 0.3);
+    border-radius: 50%;
+    border-top-color: #3b82f6;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+  }
+</style>
