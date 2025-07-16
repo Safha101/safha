@@ -782,9 +782,54 @@ const { existingContent, editMode = false, postData = null } = Astro.props;
       if (previewBtn) {
         previewBtn.addEventListener("click", function () {
           const title = titleInput?.value || "عنوان المدونة";
-          const content =
-            document.querySelector(".rich-text-content")?.innerHTML ||
-            "<p>المحتوى سيظهر هنا...</p>";
+          // Try multiple methods to get the rich text content
+          let content = "";
+
+          // Try to find content in various rich text editor containers
+          if (!content) {
+            const richTextSelectors = [
+              ".rich-text-content",
+              ".ql-editor", // Quill editor
+              ".tox-edit-area iframe", // TinyMCE
+              ".ProseMirror", // ProseMirror
+              ".DraftEditor-root", // Draft.js
+              ".editor-content", // Generic editor content
+              ".content-editor", // Generic content editor
+              "[contenteditable]", // Any contenteditable element
+              "textarea[name='content']", // Fallback textarea
+            ];
+            for (const selector of richTextSelectors) {
+              const element = document.querySelector(selector);
+              if (element) {
+                if (selector.includes("iframe")) {
+                  // Handle iframe content (like TinyMCE)
+                  try {
+                    content = element.contentDocument?.body?.innerHTML || "";
+                  } catch (e) {
+                    console.warn("Cannot access iframe content:", e);
+                  }
+                } else if (element.tagName === "TEXTAREA") {
+                  content = element.value;
+                } else {
+                  content = element.innerHTML || element.textContent || "";
+                }
+
+                if (content && content.trim()) {
+                  break;
+                }
+              }
+            }
+          }
+
+          // If still no content, provide a more helpful placeholder
+          if (!content || content.trim() === "") {
+            content = `
+        <div class="text-center text-gray-500 dark:text-gray-400 py-8">
+          <p class="text-lg mb-2">لم يتم إدخال محتوى بعد</p>
+          <p class="text-sm">يرجى كتابة محتوى المدونة في المحرر أولاً</p>
+        </div>
+      `;
+          }
 
           const previewContent = document.getElementById("previewContent");
           if (previewContent) {
