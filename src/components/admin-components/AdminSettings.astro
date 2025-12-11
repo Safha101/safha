@@ -1,0 +1,48 @@
+{/* <!-- Settings Tab --> */}
+<div id="settings-tab" class="tab-content hidden">
+  <h2 class="text-2xl font-bold text-sky-blue dark:text-royal-periwinkle mb-6">
+    إعدادات المدونة
+  </h2>
+
+  <div class="space-y-6">
+    <div class="p-6 bg-white/30 dark:bg-deep-ocean/20 rounded-xl">
+      <h3 class="text-lg font-semibold mb-4">إعدادات عامة</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">
+            مسار حفظ المدونات
+          </label>
+          <input
+            type="text"
+            value="src/content/blog/"
+            class="w-full px-4 py-2 border rounded-lg bg-transparent"
+            readonly
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2"> الحفظ التلقائي </label>
+          <label class="flex items-center gap-2">
+            <input type="checkbox" id="autoSaveEnabled" checked />
+            <span>تفعيل الحفظ التلقائي كل 30 ثانية</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-6 bg-white/30 dark:bg-deep-ocean/20 rounded-xl">
+      <h3 class="text-lg font-semibold mb-4">النسخ الاحتياطي</h3>
+      <div class="flex gap-4">
+        <button
+          class="px-4 py-2 bg-sky-blue/10 text-sky-blue border border-sky-blue/30 rounded-lg"
+        >
+          إنشاء نسخة احتياطية
+        </button>
+        <button
+          class="px-4 py-2 bg-amber-glow/10 text-amber-glow border border-amber-glow/30 rounded-lg"
+        >
+          استيراد نسخة احتياطية
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
