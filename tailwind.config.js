@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Arial", "sans-serif"], // Arial as a fallback sans font
+        sans: ["Amiri", "Cairo", "Arial", "sans-serif"], // Set 'Amiri' and 'Cairo' as the default sans fonts
         Noto: ["Noto Sans Gunjala Gondi", "sans-serif"], // Adding your custom font
         Amiri: ["Amiri", "serif"],
         Marhey: ["Marhey", "sans-serif"],

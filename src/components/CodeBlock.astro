@@ -1,15 +1,30 @@
 ---
 // src/components/CodeBlock.astro
+import Prism from "prismjs";
+// import 'prismjs/themes/prism-atom-dark.css'; // Or any other theme you prefer
+
+// // Import languages you expect to use
+// import 'prismjs/components/prism-python';
+// import 'prismjs/components/prism-javascript';
+// import 'prismjs/components/prism-markup'; // For HTML, XML, SVG, etc.
+// import 'prismjs/components/prism-css';
+// import 'prismjs/components/prism-bash';
 
 const { code, language = "text" } = Astro.props;
+
+// Highlight the code on the server-side
+const highlightedCode = Prism.highlight(
+  code,
+  Prism.languages[language] || Prism.languages.text,
+  language
+);
 ---
 
 <div class="relative code-block group font-mono" dir="ltr">
   <pre
     dir="ltr"
     class="p-4 rounded-lg bg-gray-800 overflow-x-auto text-left text-ltr">
-    <code class={`language-${language} text-sm/6 text-gray-100 whitespace-pre`}>
-      {code}
+    <code class={`language-${language} text-sm/6 text-gray-100 whitespace-pre`} set:html={highlightedCode}>
     </code>
   </pre>
 

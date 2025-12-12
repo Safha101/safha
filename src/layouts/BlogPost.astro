@@ -35,10 +35,10 @@ const { Content } = await post.render();
   post={post}
 >
   <article
-    class="prose prose-sm sm:prose-base lg:prose-lg prose-blue dark:prose-invert max-w-none text-right"
+    class="prose prose-sm sm:prose-base lg:prose-lg prose-blue dark:prose-invert max-w-none"
   >
-    <h1 class="">{post.data.title}</h1>
-    <time datetime={post.data.pubDate.toISOString()}>
+    <h1 class="text-center">{post.data.title}</h1>
+    <time datetime={post.data.pubDate.toISOString()} class="block text-center text-sm text-gray-500 mt-2">
       {formatArabicDate(post.data.pubDate)}
     </time>
     <Content components={components} />
